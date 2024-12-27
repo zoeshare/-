@@ -1,16 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  output: 'standalone',
+  output: 'export',
   images: {
     unoptimized: true,
-    domains: ['localhost', 'vercel.app'],
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**.vercel.app',
-      },
-    ],
   },
   // 确保资源在正确的基础路径下
   basePath: '',
@@ -22,7 +15,7 @@ const nextConfig = {
       use: {
         loader: 'file-loader',
         options: {
-          publicPath: '/_next/static/media/',
+          publicPath: '/_next',
           outputPath: 'static/media/',
           name: '[name].[hash].[ext]',
         },

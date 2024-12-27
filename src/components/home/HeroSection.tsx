@@ -15,6 +15,7 @@ const HeroSection: React.FC = () => {
           className="object-cover"
           quality={100}
           sizes="100vw"
+          loading="eager"
         />
       </div>
       

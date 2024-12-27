@@ -4,12 +4,10 @@ const nextConfig = {
   output: 'export',
   images: {
     unoptimized: true,
-    loader: 'custom',
-    path: './',
   },
   // 确保资源在正确的基础路径下
   basePath: '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? './' : '',
+  assetPrefix: '../../',
   // 允许视频文件
   webpack: (config) => {
     // 修改图片和媒体文件的输出路径
@@ -18,24 +16,18 @@ const nextConfig = {
       type: 'asset/resource',
       generator: {
         filename: 'static/media/[name][ext]',
-        publicPath: './'
+        publicPath: '../../'
       }
     });
 
     // 确保 publicPath 正确
     config.output = {
       ...config.output,
-      publicPath: './',
+      publicPath: '../../',
       assetModuleFilename: 'static/media/[name][ext]'
     };
 
     return config;
-  },
-  // 禁用实验性功能
-  experimental: {
-    images: {
-      unoptimized: true,
-    },
   },
 }
 

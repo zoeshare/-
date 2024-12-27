@@ -1,9 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  output: 'export',
-  trailingSlash: true,
   images: {
+    domains: ['vercel.app'],
     unoptimized: true,
   },
   // 确保资源在正确的基础路径下
@@ -19,10 +18,6 @@ const nextConfig = {
       },
     });
     return config;
-  },
-  // 配置静态资源目录
-  experimental: {
-    appDir: false,
   },
 }
 

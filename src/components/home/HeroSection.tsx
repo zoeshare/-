@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import imageLoader from '@/utils/imageLoader';
 
 const HeroSection: React.FC = () => {
   return (
@@ -8,6 +9,7 @@ const HeroSection: React.FC = () => {
       {/* 背景图片 */}
       <div className="absolute inset-0">
         <Image
+          loader={imageLoader}
           src="/images/hero/hero-bg.jpg"
           alt="恭城瑶乡茶江风光"
           fill
@@ -16,6 +18,7 @@ const HeroSection: React.FC = () => {
           quality={100}
           sizes="100vw"
           loading="eager"
+          unoptimized
         />
       </div>
       

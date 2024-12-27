@@ -2,8 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
   output: 'export',
+  trailingSlash: true,
   images: {
-    unoptimized: true,
+    loader: 'custom',
+    loaderFile: './src/utils/imageLoader.ts',
   },
   // 确保资源在正确的基础路径下
   basePath: '',

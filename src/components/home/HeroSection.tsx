@@ -6,14 +6,17 @@ const HeroSection: React.FC = () => {
   return (
     <div className="relative h-screen flex items-center justify-center overflow-hidden">
       {/* 背景图片 */}
-      <Image
-        src="/images/hero/hero-bg.jpg"
-        alt="恭城瑶乡茶江风光"
-        fill
-        priority
-        className="object-cover"
-        quality={100}
-      />
+      <div className="absolute inset-0">
+        <Image
+          src="/images/hero/hero-bg.jpg"
+          alt="恭城瑶乡茶江风光"
+          fill
+          priority
+          className="object-cover"
+          quality={100}
+          sizes="100vw"
+        />
+      </div>
       
       {/* 半透明遮罩 */}
       <div className="absolute inset-0 bg-black/50" />

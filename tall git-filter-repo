@@ -1,0 +1,36 @@
+[33mcommit b2e8eea8fdd8ea2196581670ec864f637028dcb1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: zoesheare <zoeshare@hotmail.com>
+Date:   Fri Dec 27 10:33:59 2024 +0800
+
+    feat: 添加新的 river.mp4 文件
+
+[33mcommit 6c6cf6b6ff34a3155eb0e1d47de60aa9594d528f[m
+Author: zoesheare <zoeshare@hotmail.com>
+Date:   Fri Dec 27 10:33:51 2024 +0800
+
+    chore: 移除 MP4 文件的 Git LFS 跟踪
+
+[33mcommit 3545fbb0dd7ab1fa8613feb1f387e27909f14094[m
+Author: zoesheare <zoeshare@hotmail.com>
+Date:   Fri Dec 27 10:33:30 2024 +0800
+
+    feat: 添加新的 river.mp4 文件
+
+[33mcommit c8b5bb8536ba668dd5861d1f94cc8f44d9b54ebb[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: zoesheare <zoeshare@hotmail.com>
+Date:   Fri Dec 27 10:31:46 2024 +0800
+
+    remove: 删除旧的 river.mp4 文件
+
+[33mcommit ce6d1828937fcc613cbea41218152b78ad54adc9[m
+Merge: c307585 aaf7c74
+Author: zoesheare <zoeshare@hotmail.com>
+Date:   Thu Dec 26 15:48:39 2024 +0800
+
+    Add river.mp4 using Git LFS
+
+[33mcommit c307585e0f1f7e26888ee89f2d33b054252bbfc7[m
+Author: zoesheare <zoeshare@hotmail.com>
+Date:   Thu Dec 26 15:19:27 2024 +0800
+
+    Add river.mp4 using Git LFS

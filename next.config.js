@@ -4,31 +4,28 @@ const nextConfig = {
   output: 'export',
   images: {
     unoptimized: true,
+    domains: ['vercel.app'],
   },
-  // 确保资源在正确的基础路径下
-  basePath: '',
-  assetPrefix: '../../',
-  // 允许视频文件
+  // 静态资源配置
+  assetPrefix: process.env.NODE_ENV === 'production' ? '.' : '',
   webpack: (config) => {
-    // 修改图片和媒体文件的输出路径
     config.module.rules.push({
       test: /\.(png|jpe?g|gif|svg|mp4|webm)$/,
       type: 'asset/resource',
       generator: {
-        filename: 'static/media/[name][ext]',
-        publicPath: '../../'
+        filename: 'static/media/[name][ext]'
       }
     });
 
-    // 确保 publicPath 正确
-    config.output = {
-      ...config.output,
-      publicPath: '../../',
-      assetModuleFilename: 'static/media/[name][ext]'
-    };
+    if (process.env.NODE_ENV === 'production') {
+      config.output.publicPath = './';
+    }
 
     return config;
   },
+  // 基础路径配置
+  basePath: '',
+  trailingSlash: true,
 }
 
 module.exports = nextConfig 

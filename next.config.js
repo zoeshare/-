@@ -4,28 +4,41 @@ const nextConfig = {
   output: 'export',
   images: {
     unoptimized: true,
-    domains: ['vercel.app'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
   },
   // 静态资源配置
-  assetPrefix: process.env.NODE_ENV === 'production' ? '.' : '',
+  assetPrefix: '',
   webpack: (config) => {
     config.module.rules.push({
       test: /\.(png|jpe?g|gif|svg|mp4|webm)$/,
       type: 'asset/resource',
       generator: {
-        filename: 'static/media/[name][ext]'
+        filename: 'static/media/[name][ext]',
+        publicPath: '/'
       }
     });
 
-    if (process.env.NODE_ENV === 'production') {
-      config.output.publicPath = './';
-    }
+    config.output = {
+      ...config.output,
+      publicPath: '/',
+    };
 
     return config;
   },
   // 基础路径配置
   basePath: '',
   trailingSlash: true,
+  // 禁用图片优化
+  experimental: {
+    images: {
+      unoptimized: true,
+    },
+  },
 }
 
 module.exports = nextConfig 

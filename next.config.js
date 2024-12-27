@@ -3,13 +3,12 @@ const nextConfig = {
   reactStrictMode: true,
   output: 'export',
   trailingSlash: true,
-  distDir: 'dist',
   images: {
     unoptimized: true,
   },
   // 确保资源在正确的基础路径下
   basePath: '',
-  assetPrefix: './',
+  assetPrefix: '',
   // 允许视频文件
   webpack: (config) => {
     config.module.rules.push({
@@ -20,6 +19,10 @@ const nextConfig = {
       },
     });
     return config;
+  },
+  // 配置静态资源目录
+  experimental: {
+    appDir: false,
   },
 }
 

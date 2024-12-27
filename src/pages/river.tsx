@@ -19,21 +19,21 @@ const RiverPage = () => {
   const [showThumbnail, setShowThumbnail] = useState(false);
 
   const hotspots: Hotspot[] = [
-    { x: '44.3%', y: '50%', image: '/images/river/spots/spot1.jpg', title: '滨水景观1' },
-    { x: '47%', y: '54%', image: '/images/river/spots/spot2.jpg', title: '滨水景观2' },
-    { x: '53.2%', y: '53%', image: '/images/river/spots/spot3.jpg', title: '滨水景观3' },
-    { x: '54.5%', y: '50%', image: '/images/river/spots/spot4.jpg', title: '滨水景观4' },
-    { x: '56.5%', y: '43.5%', image: '/images/river/spots/spot5.jpg', title: '滨水景观5' },
-    { x: '51.7%', y: '35%', image: '/images/river/spots/spot6.jpg', title: '滨水景观6' }
+    { x: '44.3%', y: '50%', image: '/images/river/spots/spot1.png', title: '滨水景观1' },
+    { x: '47%', y: '54%', image: '/images/river/spots/spot2.png', title: '滨水景观2' },
+    { x: '53.2%', y: '53%', image: '/images/river/spots/spot3.png', title: '滨水景观3' },
+    { x: '54.5%', y: '50%', image: '/images/river/spots/spot4.png', title: '滨水景观4' },
+    { x: '56.5%', y: '43.5%', image: '/images/river/spots/spot5.png', title: '滨水景观5' },
+    { x: '51.7%', y: '35%', image: '/images/river/spots/spot6.png', title: '滨水景观6' }
   ];
 
   const points: Hotspot[] = [
-    { x: '40%', y: '45.5%', image: '/images/river/spots/point1.jpg', title: '同乐之洲娱乐度假区' },
-    { x: '47.5%', y: '47%', image: '/images/river/spots/point2.jpg', title: '付家古街历史文化街区' },
-    { x: '51%', y: '53.5%', image: '/images/river/spots/point3.jpg', title: '茶江之眼文化休闲街区' },
-    { x: '55.3%', y: '51%', image: '/images/river/spots/point4.jpg', title: '燕岩书院研学基地' },
-    { x: '58%', y: '36%', image: '/images/river/spots/point5.jpg', title: '恭城油茶共享农庄' },
-    { x: '51.2%', y: '35.8%', image: '/images/river/spots/point6.jpg', title: '东门码头水运文化街区' }
+    { x: '40%', y: '45.5%', image: '/images/river/spots/point1.png', title: '同乐之洲娱乐度假区' },
+    { x: '47.5%', y: '47%', image: '/images/river/spots/point2.png', title: '付家古街历史文化街区' },
+    { x: '51%', y: '53.5%', image: '/images/river/spots/point3.png', title: '茶江之眼文化休闲街区' },
+    { x: '55.3%', y: '51%', image: '/images/river/spots/point4.png', title: '燕岩书院研学基地' },
+    { x: '58%', y: '36%', image: '/images/river/spots/point5.png', title: '恭城油茶共享农庄' },
+    { x: '51.2%', y: '35.8%', image: '/images/river/spots/point6.png', title: '东门码头水运文化街区' }
   ];
 
   const handleVideoEnd = () => {
@@ -92,7 +92,7 @@ const RiverPage = () => {
           <div className="relative w-full h-screen">
             <div className="relative w-full h-full">
               <Image
-                src="/images/river/master-plan.jpg"
+                src="/images/river/master-plan.png"
                 alt="总体规划图"
                 fill
                 style={{ objectFit: 'contain' }}

@@ -4,13 +4,13 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const images = [
-  { src: '/images/gallery/gallery1.jpg', title: '效果图1' },
-  { src: '/images/gallery/gallery2.jpg', title: '效果图2' },
-  { src: '/images/gallery/gallery3.jpg', title: '效果图3' },
-  { src: '/images/gallery/gallery4.jpg', title: '效果图4' },
-  { src: '/images/gallery/gallery5.jpg', title: '效果图5' },
-  { src: '/images/gallery/gallery6.jpg', title: '效果图6' },
-  { src: '/images/gallery/gallery7.jpg', title: '效果图7' }
+  { src: '/images/gallery/gallery1.png', title: '效果图1' },
+  { src: '/images/gallery/gallery2.png', title: '效果图2' },
+  { src: '/images/gallery/gallery3.png', title: '效果图3' },
+  { src: '/images/gallery/gallery4.png', title: '效果图4' },
+  { src: '/images/gallery/gallery5.png', title: '效果图5' },
+  { src: '/images/gallery/gallery6.png', title: '效果图6' },
+  { src: '/images/gallery/gallery7.png', title: '效果图7' }
 ];
 
 const GalleryPage = () => {

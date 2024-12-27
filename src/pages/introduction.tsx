@@ -17,7 +17,7 @@ const IntroductionPage = () => {
           
           <div className="relative w-full h-[600px] mb-8">
             <Image
-              src="/images/planning/overview-map.jpg"
+              src="/images/planning/overview-map.png"
               alt="恭城瑶族自治县概况图"
               fill
               style={{ objectFit: 'contain' }}

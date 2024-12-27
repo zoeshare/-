@@ -5,13 +5,13 @@ import Navigation from '../common/Navigation';
 const GalleryViewer = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const images = [
-    '/images/gallery/效果图1.jpg',
-    '/images/gallery/效果图2.jpg',
-    '/images/gallery/效果图3.jpg',
-    '/images/gallery/效果图4.jpg',
-    '/images/gallery/效果图5.jpg',
-    '/images/gallery/效果图6.jpg',
-    '/images/gallery/效果图7.jpg'
+    '/images/gallery/效果图1.png',
+    '/images/gallery/效果图2.png',
+    '/images/gallery/效果图3.png',
+    '/images/gallery/效果图4.png',
+    '/images/gallery/效果图5.png',
+    '/images/gallery/效果图6.png',
+    '/images/gallery/效果图7.png'
   ];
 
   const nextImage = () => {

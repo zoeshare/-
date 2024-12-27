@@ -33,7 +33,7 @@ const HotspotManager: React.FC<HotspotManagerProps> = ({
       id: Date.now(),
       x,
       y,
-      image: '/images/river/spots/new-spot.jpg',
+      image: '/images/river/spots/new-spot.png',
       title: '新景观点'
     };
     

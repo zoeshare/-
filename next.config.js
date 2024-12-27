@@ -4,8 +4,7 @@ const nextConfig = {
   output: 'export',
   trailingSlash: true,
   images: {
-    loader: 'custom',
-    loaderFile: './src/utils/imageLoader.ts',
+    unoptimized: true,
   },
   // 确保资源在正确的基础路径下
   basePath: '',
@@ -14,13 +13,9 @@ const nextConfig = {
   webpack: (config) => {
     config.module.rules.push({
       test: /\.(mp4|webm)$/,
-      use: {
-        loader: 'file-loader',
-        options: {
-          publicPath: '/_next',
-          outputPath: 'static/media/',
-          name: '[name].[hash].[ext]',
-        },
+      type: 'asset/resource',
+      generator: {
+        filename: 'static/media/[name].[hash][ext]',
       },
     });
     return config;

@@ -3,31 +3,41 @@ const nextConfig = {
   reactStrictMode: true,
   output: 'export',
   images: {
-    loader: 'custom',
-    loaderFile: './src/utils/imageLoader.ts',
     unoptimized: true,
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
   },
   // 静态资源配置
-  assetPrefix: process.env.NODE_ENV === 'production' ? '.' : '',
+  assetPrefix: '',
   webpack: (config) => {
+    // 分别处理不同类型的图片
     config.module.rules.push({
-      test: /\.(png|jpe?g|gif|svg|mp4|webm|avif|webp)$/,
+      test: /\.jpe?g$/i,
       type: 'asset/resource',
       generator: {
-        filename: 'static/media/[name][ext]'
+        filename: 'images/[name][ext]'
       }
     });
+
+    config.module.rules.push({
+      test: /\.(png|gif|svg|mp4|webm)$/i,
+      type: 'asset/resource',
+      generator: {
+        filename: 'static/[name][ext]'
+      }
+    });
+
+    // 确保输出路径正确
+    if (process.env.NODE_ENV === 'production') {
+      config.output = {
+        ...config.output,
+        publicPath: '/',
+      };
+    }
 
     return config;
   },
   // 基础路径配置
   basePath: '',
+  // 确保路径末尾有斜杠
   trailingSlash: true,
 }
 

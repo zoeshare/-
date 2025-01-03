@@ -1,89 +1,105 @@
 import React, { useEffect, useRef } from 'react';
+import Map from 'ol/Map';
+import View from 'ol/View';
+import TileLayer from 'ol/layer/Tile';
+import XYZ from 'ol/source/XYZ';
+import { fromLonLat } from 'ol/proj';
+import { Collection } from 'ol';
+import BaseLayer from 'ol/layer/Base';
+import 'ol/ol.css';
 
-const TIANDITU_TOKEN = '5b8b5555c60c31e8f6b47227bb274337';
+const TIANDITU_KEY = '6fa31cea60680375feb4a8637a07cd88';
 
-const MapView: React.FC = () => {
-  const mapContainerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<any>(null);
+interface Layer {
+  id: string;
+  name: string;
+  visible: boolean;
+  type: 'base' | 'overlay';
+  url?: string;
+  file?: File;
+}
+
+interface MapViewProps {
+  layers: Layer[];
+  onLayerChange: (layerId: string, visible: boolean) => void;
+  onFileUpload: (file: File) => void;
+}
+
+const MapView: React.FC<MapViewProps> = ({ layers, onLayerChange, onFileUpload }) => {
+  const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<Map | null>(null);
 
   useEffect(() => {
-    // 动态加载天地图脚本
-    const loadTianDiTu = () => {
-      return new Promise<void>((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = `https://api.tianditu.gov.cn/api?v=4.0&tk=${TIANDITU_TOKEN}`;
-        script.async = true;
-        script.onload = () => resolve();
-        script.onerror = () => reject(new Error('Failed to load TianDiTu API'));
-        document.head.appendChild(script);
-      });
-    };
+    if (!mapRef.current) return;
 
-    const initMap = async () => {
-      try {
-        await loadTianDiTu();
-        
-        if (!mapContainerRef.current || !window.T) {
-          console.error('Map container or TianDiTu API not found');
-          return;
-        }
-
-        // 恭城县政府坐标
-        const center = new window.T.LngLat(110.827896, 24.833322);
-        
-        // 创建地图实例
-        mapRef.current = new window.T.Map(mapContainerRef.current);
-        
-        // 设置中心点和缩放级别
-        mapRef.current.centerAndZoom(center, 14);
-
-        // 添加矢图层
-        const vec = new window.T.TileLayer({
-          getTileUrl: function(x: number, y: number, z: number) {
-            return 'https://t' + ((x + y) % 8) + '.tianditu.gov.cn/vec_w/wmts?' +
-              'SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles' +
-              '&TILEMATRIX=' + z + '&TILEROW=' + y + '&TILECOL=' + x + '&tk=' + TIANDITU_TOKEN;
-          }
-        });
-        mapRef.current.addLayer(vec);
-
+    // 初始化地图
+    const map = new Map({
+      target: mapRef.current,
+      layers: [
+        new TileLayer({
+          source: new XYZ({
+            url: `https://t{0-7}.tianditu.gov.cn/vec_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=${TIANDITU_KEY}`,
+            maxZoom: 18
+          }),
+          visible: layers.find(l => l.id === 'tianditu-vec')?.visible
+        }),
+        new TileLayer({
+          source: new XYZ({
+            url: `https://t{0-7}.tianditu.gov.cn/img_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=${TIANDITU_KEY}`,
+            maxZoom: 18
+          }),
+          visible: layers.find(l => l.id === 'tianditu-img')?.visible
+        }),
         // 添加标注图层
-        const cva = new window.T.TileLayer({
-          getTileUrl: function(x: number, y: number, z: number) {
-            return 'https://t' + ((x + y) % 8) + '.tianditu.gov.cn/cva_w/wmts?' +
-              'SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cva&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles' +
-              '&TILEMATRIX=' + z + '&TILEROW=' + y + '&TILECOL=' + x + '&tk=' + TIANDITU_TOKEN;
-          }
-        });
-        mapRef.current.addLayer(cva);
+        new TileLayer({
+          source: new XYZ({
+            url: `https://t{0-7}.tianditu.gov.cn/cva_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cva&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=${TIANDITU_KEY}`,
+            maxZoom: 18
+          }),
+          visible: layers.find(l => l.id === 'tianditu-vec')?.visible
+        }),
+        new TileLayer({
+          source: new XYZ({
+            url: `https://t{0-7}.tianditu.gov.cn/cia_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cia&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=${TIANDITU_KEY}`,
+            maxZoom: 18
+          }),
+          visible: layers.find(l => l.id === 'tianditu-img')?.visible
+        })
+      ],
+      view: new View({
+        center: fromLonLat([110.83176, 24.83126]), // 恭城县城位置
+        zoom: 12
+      })
+    });
 
-        // 添加控件
-        mapRef.current.addControl(new window.T.Control.Zoom());
-        mapRef.current.addControl(new window.T.Control.Scale());
-        mapRef.current.addControl(new window.T.Control.MapType());
-
-        // 启用鼠标滚轮缩放
-        mapRef.current.enableScrollWheelZoom();
-      } catch (error) {
-        console.error('Failed to initialize map:', error);
-      }
-    };
-
-    initMap();
+    mapInstanceRef.current = map;
 
     return () => {
-      if (mapRef.current) {
-        mapRef.current.destroy();
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.setTarget(undefined);
+        mapInstanceRef.current = null;
       }
     };
   }, []);
 
+  // 监听图层可见性变化
+  useEffect(() => {
+    if (!mapInstanceRef.current) return;
+
+    const map = mapInstanceRef.current;
+    const layerCollection = map.getLayers() as Collection<BaseLayer>;
+    layerCollection.forEach((layer: BaseLayer, index: number) => {
+      if (index < 4) { // 基础图层（包括标注）
+        const isVec = index === 0 || index === 2;
+        const layerId = isVec ? 'tianditu-vec' : 'tianditu-img';
+        const visible = layers.find(l => l.id === layerId)?.visible || false;
+        layer.setVisible(visible);
+      }
+    });
+  }, [layers]);
+
   return (
-    <div 
-      ref={mapContainerRef} 
-      className="w-full h-full absolute inset-0"
-      style={{ background: '#f0f0f0' }}
-    />
+    <div ref={mapRef} className="w-full h-full" />
   );
 };
 

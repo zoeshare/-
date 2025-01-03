@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 const ModelViewer = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -48,19 +47,6 @@ const ModelViewer = () => {
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
     directionalLight.position.set(0, 1, 0);
     scene.add(directionalLight);
-
-    // 加载3D模型
-    const loader = new GLTFLoader();
-    loader.load(
-      '/models/model.gltf',
-      (gltf) => {
-        scene.add(gltf.scene);
-      },
-      undefined,
-      (error) => {
-        console.error('An error occurred loading the model:', error);
-      }
-    );
 
     // 动画循环
     const animate = () => {

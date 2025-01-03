@@ -1,57 +1,397 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Navigation from '../common/Navigation';
+import Image from 'next/image';
 
-const GalleryViewer = () => {
+interface Point {
+  x: string;
+  y: string;
+  images: string[];
+  title: string;
+  planImage: string;
+  description: string[];
+}
+
+interface GalleryViewerProps {
+  isRiverPage?: boolean;
+}
+
+const GalleryViewer: React.FC<GalleryViewerProps> = ({ isRiverPage = false }) => {
+  const [currentPointIndex, setCurrentPointIndex] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const images = [
-    '/images/gallery/效果图1.png',
-    '/images/gallery/效果图2.png',
-    '/images/gallery/效果图3.png',
-    '/images/gallery/效果图4.png',
-    '/images/gallery/效果图5.png',
-    '/images/gallery/效果图6.png',
-    '/images/gallery/效果图7.png'
+  const [showMasterPlan, setShowMasterPlan] = useState(true);
+  const [showNodePlan, setShowNodePlan] = useState(false);
+  const [showEffectImage, setShowEffectImage] = useState(false);
+  const [hoveredPoint, setHoveredPoint] = useState<number | null>(null);
+  const [scale, setScale] = useState(1);
+  const [showNodes, setShowNodes] = useState(!isRiverPage);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const points: Point[] = [
+    { 
+      x: '35.8%', 
+      y: '47%', 
+      images: [
+        '/images/gallery/同乐之洲娱乐度假区1.png',
+        '/images/gallery/同乐之洲娱乐度假区2.png'
+      ], 
+      title: '同乐之洲娱乐度假区',
+      planImage: '/images/gallery/master plan-同乐之洲娱乐度假区.png',
+      description: [
+        '体育娱乐综合度假区',
+        '· 运动天堂，水上乐园',
+        '· 生态防洪，景观游憩'
+      ]
+    },
+    { 
+      x: '47.5%', 
+      y: '49%', 
+      images: ['/images/gallery/付家古街历史文化街区.png'], 
+      title: '付家古街历史文化街区',
+      planImage: '/images/gallery/master plan-付家古街历史文化街区.png',
+      description: [
+        '"恭城之心"文化休闲街区',
+        '· 文化传承城市宣传展示空间',
+        '· 历史建筑改造创意策划示范点'
+      ]
+    },
+    { 
+      x: '52%', 
+      y: '54%', 
+      images: [
+        '/images/gallery/茶江之眼文化休闲街区1.png',
+        '/images/gallery/茶江之眼文化休闲街区2.png'
+      ], 
+      title: '茶江之眼文化休闲街区',
+      planImage: '/images/gallery/master plan-茶江之眼文化休闲街区.png',
+      description: [
+        '茶江 · 世界级休闲水岸第一站',
+        '· 微度假旅游最佳目的地',
+        '· 恭城最鲜活的城市记忆馆'
+      ]
+    },
+    { 
+      x: '59.5%', 
+      y: '52%', 
+      images: ['/images/gallery/燕岩书院研学基地.png'], 
+      title: '燕岩书院研学基地',
+      planImage: '/images/gallery/master plan-燕岩书院研学基地.png',
+      description: [
+        '茶江水畔好读书 · 世界级旅游城市的研学基地',
+        '· 沉浸式国学教育的先锋',
+        '· 大自然的第三课堂'
+      ]
+    },
+    { 
+      x: '65%', 
+      y: '40%', 
+      images: ['/images/gallery/恭城油茶共享农庄.png'], 
+      title: '恭城油茶共享农庄',
+      planImage: '/images/gallery/master plan-恭城油茶共享农庄.png',
+      description: [
+        '恭城油茶 · 农文旅商融合示范区',
+        '· 共享农庄，农旅融合',
+        '· 城市绿肺，双城融合'
+      ]
+    },
+    { 
+      x: '53%', 
+      y: '37%', 
+      images: ['/images/gallery/东门码头水运文化街区.png'], 
+      title: '东门码头水运文化街区',
+      planImage: '/images/gallery/master plan-东门码头水运文化街区.png',
+      description: [
+        '茶江文化展示体验区',
+        '· 感知城市记忆、挖掘文化本源',
+        '· 共享文化空间、营造居游共享'
+      ]
+    }
   ];
 
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+  const handleWheel = (e: WheelEvent) => {
+    if (!showMasterPlan) return;
+    e.preventDefault();
+    
+    const delta = e.deltaY * -0.001;
+    const newScale = Math.min(Math.max(scale + delta, 1), 3);
+    
+    const container = containerRef.current;
+    if (!container) return;
+    
+    const rect = container.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / container.offsetWidth;
+    const y = (e.clientY - rect.top) / container.offsetHeight;
+    
+    const newPosition = {
+      x: position.x - (newScale - scale) * (x - 0.5) * 100,
+      y: position.y - (newScale - scale) * (y - 0.5) * 100
+    };
+    
+    setScale(newScale);
+    setPosition(newPosition);
   };
 
-  const previousImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  useEffect(() => {
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener('wheel', handleWheel, { passive: false });
+      return () => {
+        container.removeEventListener('wheel', handleWheel);
+      };
+    }
+  }, [scale, position, showMasterPlan]);
+
+  const handlePointClick = (index: number) => {
+    setCurrentPointIndex(index);
+    setShowMasterPlan(false);
+    setShowNodePlan(true);
+    setShowEffectImage(false);
+    setCurrentImageIndex(0);
   };
+
+  const handleBackClick = () => {
+    setShowMasterPlan(true);
+    setShowNodePlan(false);
+    setShowEffectImage(false);
+    setCurrentImageIndex(0);
+  };
+
+  const handleEffectClick = () => {
+    setShowEffectImage(true);
+    setShowNodePlan(false);
+  };
+
+  const handlePlanClick = () => {
+    setShowEffectImage(false);
+    setShowNodePlan(true);
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prev) => 
+      (prev + 1) % points[currentPointIndex].images.length
+    );
+  };
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prev) => 
+      (prev - 1 + points[currentPointIndex].images.length) % points[currentPointIndex].images.length
+    );
+  };
+
+  useEffect(() => {
+    if (!isRiverPage) return;
+
+    const handleVideoEnd = (event: MessageEvent) => {
+      if (event.data === 'videoEnded') {
+        setShowNodes(false);
+      }
+    };
+
+    window.addEventListener('message', handleVideoEnd);
+    return () => {
+      window.removeEventListener('message', handleVideoEnd);
+    };
+  }, [isRiverPage]);
 
   return (
-    <div className="min-h-screen bg-black relative">
-      <Navigation />
-      <div className="absolute inset-0 flex items-center justify-center">
-        <AnimatePresence mode="wait">
-          <motion.img
-            key={currentImageIndex}
-            src={images[currentImageIndex]}
-            alt={`Gallery image ${currentImageIndex + 1}`}
-            className="max-w-full max-h-full object-contain"
+    <div className="min-h-screen bg-white relative">
+      <AnimatePresence mode="wait">
+        {showMasterPlan ? (
+          <motion.div
+            key="masterPlan"
+            className="relative min-h-screen"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
-          />
-        </AnimatePresence>
-      </div>
-
-      <button
-        onClick={previousImage}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-4 rounded-full hover:bg-opacity-75 transition-all"
-      >
-        ←
-      </button>
-      <button
-        onClick={nextImage}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-4 rounded-full hover:bg-opacity-75 transition-all"
-      >
-        →
-      </button>
+          >
+            <div ref={containerRef} className="relative w-full h-screen overflow-hidden bg-white pt-16">
+              {showNodes && (
+                <div className="absolute left-12 lg:left-16 2xl:left-24 top-1/2 -translate-y-1/2 z-10 space-y-0.5 lg:space-y-5 2xl:space-y-7 text-black max-w-2xl lg:max-w-3xl 2xl:max-w-4xl">
+                  {points.map((point, index) => (
+                    <motion.div 
+                      key={`text-${index}`} 
+                      className={`space-y-[2px] lg:space-y-1.5 2xl:space-y-2 transition-all duration-300 origin-left cursor-pointer ${hoveredPoint === index ? 'text-red-600 scale-125' : ''}`}
+                      onMouseEnter={() => setHoveredPoint(index)}
+                      onMouseLeave={() => setHoveredPoint(null)}
+                      onClick={() => handlePointClick(index)}
+                    >
+                      <h3 className="text-[10px] lg:text-xl 2xl:text-2xl font-bold">
+                        {`${index + 1}、`} {point.title}
+                      </h3>
+                      {point.description.map((line, i) => (
+                        <p key={i} className={`${i === 0 ? "font-semibold text-[8px] lg:text-lg 2xl:text-xl" : hoveredPoint === index ? "text-red-500" : "text-gray-600"} text-[7px] lg:text-base 2xl:text-lg leading-[10px] lg:leading-normal 2xl:leading-relaxed`}>
+                          {line}
+                        </p>
+                      ))}
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+              <div className="absolute right-[5%] lg:right-[8%] 2xl:right-[10%] top-0 w-[75%] lg:w-[70%] 2xl:w-[65%] h-full">
+                <motion.div
+                  className="relative w-full h-full"
+                  style={{
+                    scale,
+                    x: position.x,
+                    y: position.y,
+                    transformOrigin: 'center center'
+                  }}
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                >
+                  <Image
+                    src="/images/gallery/master-plan.png"
+                    alt="总体规划图"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                    priority
+                  />
+                  {showNodes && (
+                    <div className="absolute inset-0 pointer-events-none">
+                      {points.map((point, index) => (
+                        <motion.div
+                          key={`point-${index}`}
+                          className="absolute transform -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
+                          style={{ 
+                            left: point.x, 
+                            top: point.y,
+                            position: 'absolute'
+                          }}
+                          onMouseEnter={() => setHoveredPoint(index)}
+                          onMouseLeave={() => setHoveredPoint(null)}
+                        >
+                          <motion.button
+                            onClick={() => handlePointClick(index)}
+                            whileHover={{ scale: 1.8 }}
+                            animate={{ scale: hoveredPoint === index ? 1.8 : 1 }}
+                            transition={{ duration: 0.3 }}
+                            className="relative w-12 h-12"
+                          >
+                            <Image
+                              src="/images/gallery/point.gif"
+                              alt="节点图标"
+                              width={48}
+                              height={48}
+                              className="w-full h-full"
+                            />
+                          </motion.button>
+                          {hoveredPoint === index && (
+                            <motion.div
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: 10 }}
+                              className="absolute left-1/2 transform -translate-x-1/2 mt-4 whitespace-nowrap bg-black/50 text-white px-4 py-2 rounded text-base"
+                            >
+                              {point.title}
+                            </motion.div>
+                          )}
+                        </motion.div>
+                      ))}
+                    </div>
+                  )}
+                </motion.div>
+              </div>
+            </div>
+          </motion.div>
+        ) : showNodePlan ? (
+          <motion.div
+            key="nodePlan"
+            className="relative w-full h-screen flex items-center justify-center bg-white"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Image
+              src={points[currentPointIndex].planImage}
+              alt={points[currentPointIndex].title}
+              fill
+              style={{ objectFit: 'contain' }}
+              priority
+            />
+            <div className="absolute top-1/2 right-12 -translate-y-1/2 flex flex-col gap-8">
+              <motion.button
+                onClick={handleEffectClick}
+                whileHover={{ scale: 1.1 }}
+                className="w-32 h-32"
+              >
+                <Image
+                  src="/images/gallery/效果图.png"
+                  alt="效果图"
+                  width={128}
+                  height={128}
+                  className="w-full h-full"
+                />
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                className="w-32 h-32"
+              >
+                <Image
+                  src="/images/gallery/三维模型.png"
+                  alt="三维模型"
+                  width={128}
+                  height={128}
+                  className="w-full h-full"
+                />
+              </motion.button>
+            </div>
+            <button
+              onClick={handleBackClick}
+              className="absolute top-8 left-8 bg-black/50 text-white px-6 py-3 rounded-lg hover:bg-black/75 transition-colors"
+            >
+              返回总图
+            </button>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="gallery"
+            className="relative w-full h-screen flex items-center justify-center bg-white"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Image
+              src={points[currentPointIndex].images[currentImageIndex]}
+              alt={points[currentPointIndex].title}
+              fill
+              style={{ objectFit: 'contain' }}
+              priority
+            />
+            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-6 py-3 rounded-lg text-xl">
+              {points[currentPointIndex].title}
+              {points[currentPointIndex].images.length > 1 && (
+                <span className="ml-4 text-gray-400">
+                  {currentImageIndex + 1} / {points[currentPointIndex].images.length}
+                </span>
+              )}
+            </div>
+            <button
+              onClick={handlePlanClick}
+              className="absolute top-8 left-8 bg-black/50 text-white px-6 py-3 rounded-lg hover:bg-black/75 transition-colors"
+            >
+              返回平面图
+            </button>
+            {points[currentPointIndex].images.length > 1 && (
+              <>
+                <button
+                  onClick={handlePrevImage}
+                  className="absolute left-8 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-4 rounded-full hover:bg-black/75 transition-colors text-2xl font-bold"
+                >
+                  ＜
+                </button>
+                <button
+                  onClick={handleNextImage}
+                  className="absolute right-8 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-4 rounded-full hover:bg-black/75 transition-colors text-2xl font-bold"
+                >
+                  ＞
+                </button>
+              </>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

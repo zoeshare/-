@@ -1,63 +1,115 @@
-import React, { useRef } from 'react';
-import { GISLayer } from '../../types/gis';
+import React, { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 
-interface GISManagerProps {
-  layers: GISLayer[];
-  onLayerChange: (layers: GISLayer[]) => void;
-  onFileUpload: (file: File) => void;
+const MapView = dynamic(() => import('./MapView'), { 
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center bg-gray-100">
+      <div className="text-gray-600">地图加载中...</div>
+    </div>
+  )
+});
+
+interface Layer {
+  id: string;
+  name: string;
+  visible: boolean;
+  type: 'base' | 'overlay';
+  url?: string;
+  file?: File;
 }
 
-const GISManager: React.FC<GISManagerProps> = ({ layers, onLayerChange, onFileUpload }) => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
+const GISManager: React.FC = () => {
+  const [mounted, setMounted] = useState(false);
+  const [layers, setLayers] = useState<Layer[]>([
+    {
+      id: 'tianditu-vec',
+      name: '天地图矢量图层',
+      visible: true,
+      type: 'base'
+    },
+    {
+      id: 'tianditu-img',
+      name: '天地图影像图层',
+      visible: false,
+      type: 'base'
+    }
+  ]);
 
-  const handleLayerToggle = (layerId: string) => {
-    const updatedLayers = layers.map(layer => {
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
+  const handleLayerChange = (layerId: string, visible: boolean) => {
+    setLayers(layers.map(layer => {
+      if (layer.type === 'base') {
+        return {
+          ...layer,
+          visible: layer.id === layerId
+        };
+      }
       if (layer.id === layerId) {
-        return { ...layer, visible: !layer.visible };
+        return {
+          ...layer,
+          visible
+        };
       }
       return layer;
-    });
-    onLayerChange(updatedLayers);
+    }));
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      onFileUpload(file);
-    }
+  const handleFileUpload = (file: File) => {
+    const newLayer: Layer = {
+      id: `file-${Date.now()}`,
+      name: file.name,
+      visible: true,
+      type: 'overlay',
+      file
+    };
+    setLayers([...layers, newLayer]);
   };
+
+  if (!mounted) return null;
 
   return (
-    <div className="fixed top-4 right-4 bg-white p-4 rounded-lg shadow-lg z-50">
-      <h3 className="text-lg font-bold mb-4">图层管理</h3>
-      <div className="space-y-2">
-        {layers.map(layer => (
-          <div key={layer.id} className="flex items-center">
+    <div className="relative w-full h-full">
+      <div className="absolute top-4 left-4 z-10 bg-white rounded-lg shadow-lg p-4">
+        <div className="space-y-4">
+          <h3 className="font-medium">图层控制</h3>
+          {layers.map(layer => (
+            <div key={layer.id} className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={layer.visible}
+                onChange={(e) => handleLayerChange(layer.id, e.target.checked)}
+                className="rounded text-blue-500"
+              />
+              <span>{layer.name}</span>
+            </div>
+          ))}
+          <div className="pt-2 border-t">
             <input
-              type="checkbox"
-              checked={layer.visible}
-              onChange={() => handleLayerToggle(layer.id)}
-              className="mr-2"
+              type="file"
+              accept=".geojson,.json,.kml"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  handleFileUpload(file);
+                }
+              }}
+              className="text-sm"
             />
-            <span>{layer.name}</span>
           </div>
-        ))}
+        </div>
       </div>
-      <div className="mt-4">
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          accept=".json,.geojson"
-          className="hidden"
+      {mounted && (
+        <MapView 
+          layers={layers} 
+          onLayerChange={handleLayerChange} 
+          onFileUpload={handleFileUpload} 
         />
-        <button
-          onClick={() => fileInputRef.current?.click()}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          上传GIS数据
-        </button>
-      </div>
+      )}
     </div>
   );
 };

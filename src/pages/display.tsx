@@ -1,10 +1,10 @@
 import React from 'react';
+import Navigation from '../components/Navigation';
 import GalleryViewer from '../components/planning/GalleryViewer';
-import Navigation from '../components/common/Navigation';
 
 const DisplayPage: React.FC = () => {
   return (
-    <div className="relative">
+    <div className="pt-16 relative">
       <Navigation />
       <GalleryViewer />
     </div>

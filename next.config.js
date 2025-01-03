@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  output: 'export',
   images: {
     unoptimized: true,
   },
@@ -18,10 +17,19 @@ const nextConfig = {
     });
 
     config.module.rules.push({
-      test: /\.(png|gif|svg|mp4|webm)$/i,
+      test: /\.(png|gif|svg)$/i,
       type: 'asset/resource',
       generator: {
         filename: 'static/[name][ext]'
+      }
+    });
+
+    // 处理视频文件
+    config.module.rules.push({
+      test: /\.(mp4|webm)$/i,
+      type: 'asset/resource',
+      generator: {
+        filename: 'videos/[name][ext]'
       }
     });
 

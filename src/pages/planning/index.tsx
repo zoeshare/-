@@ -1,16 +1,18 @@
 import React from 'react';
-import Navigation from '../../components/common/Navigation';
-import ModelViewer from '../../components/planning/ModelViewer';
-import GallerySection from '../../components/planning/GallerySection';
+import Navigation from '@/components/Navigation';
+import ModelViewer from '@/components/planning/ModelViewer';
+import GallerySection from '@/components/planning/GallerySection';
 
-const Planning: React.FC = () => {
+const PlanningPage = () => {
   return (
-    <div>
+    <div className="min-h-screen relative">
       <Navigation />
-      <ModelViewer />
-      <GallerySection />
+      <div className="pt-16">
+        <ModelViewer />
+        <GallerySection />
+      </div>
     </div>
   );
 };
 
-export default Planning; 
+export default PlanningPage; 

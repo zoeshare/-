@@ -3,7 +3,7 @@ import { AI_CONFIG } from '@/config/ai.config';
 import crypto from 'crypto';
 
 type ResponseData = {
-  message: string;
+  response?: string;
   error?: string;
 };
 
@@ -45,42 +45,54 @@ export default async function handler(
   res: NextApiResponse<ResponseData>
 ) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ message: '只允许 POST 请求', error: 'Method not allowed' });
+    return res.status(405).json({ error: '只支持 POST 请求' });
   }
 
   try {
     const { message } = req.body;
+    if (!message) {
+      return res.status(400).json({ error: '消息不能为空' });
+    }
+
     const token = generateToken(AI_CONFIG.ZHIPU_API_KEY);
 
     const response = await fetch(AI_CONFIG.BASE_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify({
         model: AI_CONFIG.MODEL,
         messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: message }
+          {
+            role: 'system',
+            content: SYSTEM_PROMPT
+          },
+          {
+            role: 'user',
+            content: message
+          }
         ],
         temperature: 0.7,
-        top_p: 0.7,
+        top_p: 0.95,
         max_tokens: 1500,
-        stream: false,
-      }),
+        stream: false
+      })
     });
 
-    const data = await response.json();
-    
     if (!response.ok) {
-      throw new Error(data.error?.message || '请求失败');
+      const errorData = await response.json();
+      console.error('智谱 AI API 错误:', errorData);
+      throw new Error(errorData.error?.message || '请求智谱 AI 失败');
     }
 
-    const aiResponse = data.choices[0]?.message?.content || '抱歉，我暂时无法回答这个问题。';
-    res.status(200).json({ message: aiResponse });
+    const data = await response.json();
+    const aiResponse = data.choices[0]?.message?.content || '抱歉，我无法生成回答。';
+
+    return res.status(200).json({ response: aiResponse });
   } catch (error) {
-    console.error('Chat API Error:', error);
-    res.status(500).json({ message: '服务器错误，请稍后再试', error: 'Internal server error' });
+    console.error('处理请求错误:', error);
+    return res.status(500).json({ error: '服务器内部错误' });
   }
 } 

@@ -1,6 +1,7 @@
-// 判断是否在微信浏览器中
+// 检测是否在微信浏览器中
 export const isWechatBrowser = (): boolean => {
-  const ua = navigator.userAgent.toLowerCase();
+  if (typeof window === 'undefined') return false;
+  const ua = window.navigator.userAgent.toLowerCase();
   return ua.indexOf('micromessenger') !== -1;
 };
 

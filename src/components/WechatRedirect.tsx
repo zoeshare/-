@@ -1,22 +1,16 @@
-import React, { useEffect } from 'react';
-import { isWechatBrowser, handleWechatRedirect, showBrowserTip } from '../utils/wechatRedirect';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { isWechatBrowser } from '../utils/wechatRedirect';
 
-const WechatRedirect: React.FC = () => {
+export default function WechatRedirect() {
+  const router = useRouter();
+
   useEffect(() => {
     if (isWechatBrowser()) {
-      // 先显示提示信息
-      showBrowserTip();
-      
-      // 延迟执行跳转
-      const timer = setTimeout(() => {
-        handleWechatRedirect();
-      }, 2000); // 给用户2秒时间看到提示信息
-      
-      return () => clearTimeout(timer);
+      // 在微信浏览器中，重定向到跳转页面
+      router.push('/redirect');
     }
-  }, []);
+  }, [router]);
 
-  return null; // 这个组件不需要渲染任何内容
-};
-
-export default WechatRedirect; 
+  return null;
+} 

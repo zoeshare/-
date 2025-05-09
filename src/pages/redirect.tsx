@@ -1,14 +1,32 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 export default function Redirect() {
   const [url, setUrl] = useState('');
+  const [isWechat, setIsWechat] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
+    // 检测是否在微信浏览器中
+    const isWechatBrowser = /MicroMessenger/i.test(navigator.userAgent);
+    setIsWechat(isWechatBrowser);
+
+    if (!isWechatBrowser) {
+      // 如果不是微信浏览器，直接跳转到首页
+      router.push('/');
+      return;
+    }
+
     // 获取当前页面URL
     const currentUrl = window.location.href;
     setUrl(currentUrl);
-  }, []);
+  }, [router]);
+
+  // 如果不是微信浏览器，不渲染任何内容
+  if (!isWechat) {
+    return null;
+  }
 
   return (
     <>

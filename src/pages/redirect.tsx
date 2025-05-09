@@ -21,60 +21,92 @@ export default function Redirect() {
         <meta name="aplus-touch" content="1" />
       </Head>
       <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
         width: '100%',
         height: '100%',
-        margin: 0,
-        padding: 0,
-        backgroundColor: '#fff'
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        zIndex: 9999,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: '#fff'
       }}>
+        {/* 顶部提示 */}
         <div style={{
-          fontSize: '15px',
-          color: '#fff',
-          height: '70%',
-          lineHeight: 1.8,
-          paddingLeft: '20px',
-          paddingTop: '20px',
-          background: 'url(//gw.alicdn.com/tfs/TB1eSZaNFXXXXb.XXXXXXXXXXXX-750-234.png) center top/contain no-repeat'
+          position: 'absolute',
+          top: '20px',
+          right: '20px',
+          textAlign: 'center',
+          fontSize: '16px',
+          lineHeight: 1.5
         }}>
-          <p>点击右上角<img src="//gw.alicdn.com/tfs/TB1xwiUNpXXXXaIXXXXXXXXXXXX-55-55.png" style={{width: '25px', height: '25px', verticalAlign: 'middle', margin: '0 .2em'}} /> <span>Safari打开</span></p>
-          <p>可以继续浏览本站哦~</p>
+          <div style={{ marginBottom: '10px' }}>点击右上角</div>
+          <div style={{ 
+            width: '30px', 
+            height: '30px', 
+            margin: '0 auto',
+            background: 'url(//gw.alicdn.com/tfs/TB1xwiUNpXXXXaIXXXXXXXXXXXX-55-55.png) center/contain no-repeat'
+          }} />
+          <div style={{ marginTop: '10px' }}>选择浏览器打开</div>
         </div>
+
+        {/* 中间提示 */}
         <div style={{
-          fontWeight: 'bold',
-          margin: '-285px 0px 10px',
           textAlign: 'center',
-          fontSize: '20px',
-          marginBottom: '125px'
+          padding: '0 20px'
         }}>
-          1.防止腾讯屏蔽本站链接<br /><br />
-          2.建议用QQ浏览器打开效果最佳<br /><br />
-          3.复制链接到浏览器打开
+          <div style={{
+            fontSize: '20px',
+            fontWeight: 'bold',
+            marginBottom: '20px'
+          }}>
+            请使用浏览器打开
+          </div>
+          <div style={{
+            fontSize: '16px',
+            color: '#999',
+            marginBottom: '30px'
+          }}>
+            获得最佳浏览体验
+          </div>
         </div>
+
+        {/* 底部按钮 */}
         <div style={{
-          margin: '0 auto',
-          width: '290px',
-          textAlign: 'center',
-          fontSize: '15px',
-          color: '#2466f4',
-          background: 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAcAQMAAACak0ePAAAABlBMVEUAAAAdYfh+GakkAAAAAXRSTlMAQObYZgAAAA5JREFUCNdjwA8acEkAAAy4AIE4hQq/AAAAAElFTkSuQmCC) left center/auto 15px repeat-x'
+          position: 'absolute',
+          bottom: '40px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '80%',
+          maxWidth: '300px'
         }}>
-          <span style={{backgroundColor: '#fff', padding: '0 5px'}}>点击复制链接</span>
+          <a href={url} style={{
+            display: 'block',
+            width: '100%',
+            height: '44px',
+            lineHeight: '44px',
+            textAlign: 'center',
+            fontSize: '16px',
+            color: '#fff',
+            backgroundColor: '#2466f4',
+            borderRadius: '22px',
+            textDecoration: 'none',
+            marginBottom: '15px'
+          }}>
+            在浏览器中打开
+          </a>
+          <div style={{
+            textAlign: 'center',
+            fontSize: '14px',
+            color: '#999',
+            marginTop: '10px'
+          }}>
+            复制链接到浏览器打开
+          </div>
         </div>
-        <a href={url} style={{
-          display: 'block',
-          width: '214px',
-          height: '40px',
-          lineHeight: '40px',
-          margin: '18px auto 0 auto',
-          textAlign: 'center',
-          fontSize: '18px',
-          color: '#2466f4',
-          borderRadius: '20px',
-          border: '.5px #2466f4 solid',
-          textDecoration: 'none'
-        }}>
-          在浏览器中打开
-        </a>
       </div>
     </>
   );

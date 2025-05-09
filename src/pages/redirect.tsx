@@ -45,8 +45,10 @@ export default function Redirect() {
         }}>
           {/* 箭头SVG */}
           <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 38L38 10" stroke="#fff" strokeWidth="4" strokeLinecap="round"/>
-            <path d="M18 10H38V30" stroke="#fff" strokeWidth="4" strokeLinecap="round"/>
+            <path d="M12 36C12 36 36 12 36 12" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M20 12H36V28" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M12 36C12 36 36 12 36 12" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 2"/>
+            <path d="M20 12H36V28" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 2"/>
           </svg>
           <div style={{
             marginTop: 8,

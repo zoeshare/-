@@ -24,87 +24,60 @@ export default function Redirect() {
         position: 'fixed',
         top: 0,
         left: 0,
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        width: '100vw',
+        height: '100vh',
+        backgroundColor: 'rgba(0,0,0,0.92)',
         zIndex: 9999,
+        color: '#fff',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        color: '#fff'
       }}>
-        {/* 顶部提示 */}
+        {/* 右上角箭头和提示 */}
         <div style={{
           position: 'absolute',
-          top: '20px',
-          right: '20px',
-          textAlign: 'center',
-          fontSize: '16px',
-          lineHeight: 1.5
+          top: 18,
+          right: 18,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-end',
         }}>
-          <div style={{ marginBottom: '10px' }}>点击右上角</div>
-          <div style={{ 
-            width: '30px', 
-            height: '30px', 
-            margin: '0 auto',
-            background: 'url(//gw.alicdn.com/tfs/TB1xwiUNpXXXXaIXXXXXXXXXXXX-55-55.png) center/contain no-repeat'
-          }} />
-          <div style={{ marginTop: '10px' }}>选择浏览器打开</div>
-        </div>
-
-        {/* 中间提示 */}
-        <div style={{
-          textAlign: 'center',
-          padding: '0 20px'
-        }}>
+          {/* 箭头SVG */}
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 38L38 10" stroke="#fff" strokeWidth="4" strokeLinecap="round"/>
+            <path d="M18 10H38V30" stroke="#fff" strokeWidth="4" strokeLinecap="round"/>
+          </svg>
           <div style={{
-            fontSize: '20px',
+            marginTop: 8,
+            fontSize: 18,
             fontWeight: 'bold',
-            marginBottom: '20px'
+            textAlign: 'right',
+            lineHeight: 1.4,
+            textShadow: '0 2px 8px rgba(0,0,0,0.5)'
           }}>
-            请使用浏览器打开
-          </div>
-          <div style={{
-            fontSize: '16px',
-            color: '#999',
-            marginBottom: '30px'
-          }}>
-            获得最佳浏览体验
+            请点击右上角…<br />选择"浏览器打开"
           </div>
         </div>
-
-        {/* 底部按钮 */}
+        {/* 中间简洁说明 */}
         <div style={{
-          position: 'absolute',
-          bottom: '40px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '80%',
-          maxWidth: '300px'
+          textAlign: 'center',
+          marginTop: 60,
         }}>
-          <a href={url} style={{
-            display: 'block',
-            width: '100%',
-            height: '44px',
-            lineHeight: '44px',
-            textAlign: 'center',
-            fontSize: '16px',
-            color: '#fff',
-            backgroundColor: '#2466f4',
-            borderRadius: '22px',
-            textDecoration: 'none',
-            marginBottom: '15px'
-          }}>
-            在浏览器中打开
-          </a>
           <div style={{
-            textAlign: 'center',
-            fontSize: '14px',
-            color: '#999',
-            marginTop: '10px'
+            fontSize: 22,
+            fontWeight: 'bold',
+            marginBottom: 18,
+            textShadow: '0 2px 8px rgba(0,0,0,0.5)'
           }}>
-            复制链接到浏览器打开
+            当前页面不支持直接访问
+          </div>
+          <div style={{
+            fontSize: 16,
+            color: '#bbb',
+            textShadow: '0 2px 8px rgba(0,0,0,0.5)'
+          }}>
+            请按照右上角提示用浏览器打开本页面
           </div>
         </div>
       </div>
